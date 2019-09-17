@@ -39,7 +39,6 @@ module serv_mem_if
    wire dat_valid = i_word | (i_bytecnt == 2'b00) | (i_half & !i_bytecnt[1]);
    assign o_rd = dat_valid ? dat_cur : signbit & i_signed;
 
-
    wire       upper_half = i_lsb[1];
 
    assign o_wb_sel[3] = i_word | (i_half & i_lsb[1]) | (i_lsb == 2'b11);

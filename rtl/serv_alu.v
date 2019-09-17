@@ -105,11 +105,15 @@ module serv_alu
 
    assign o_rd = (i_rd_sel == ALU_RESULT_ADD) ? result_add :
                  (i_rd_sel == ALU_RESULT_SR)  ? result_sh :
-                 (i_rd_sel == ALU_RESULT_LT)  ? result_lt_r :
+                 (i_rd_sel == ALU_RESULT_LT)  ? result_lt_2r :
                  (i_rd_sel == ALU_RESULT_BOOL) ? result_bool : 1'bx;
 
 
    reg 	eq_r;
+
+   //Ugly hack that relies on the fact that there's a one cycle gap
+   //between INIT and RUN for slt* ops. Bound to break
+   reg 	result_lt_2r;
 
    always @(posedge clk) begin
       if (i_init) begin
@@ -120,6 +124,7 @@ module serv_alu
 	 if (result_lt_r)
 	   result_lt_r <= 1'b0;
       end
+      result_lt_2r <= result_lt_r;
       en_r <= i_en;
    end
 
